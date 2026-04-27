@@ -3,7 +3,7 @@ from src import models
 
 
 @typing.runtime_checkable
-class Book(typing.Protocol):
+class OrderBook(typing.Protocol):
     def process_limit_order(self, order: models.Order) -> models.MatchResult:
         """
         The core engine entry point.
