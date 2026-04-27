@@ -1,9 +1,7 @@
-import typing
 from src import models
 
 
-@typing.runtime_checkable
-class OrderBook(typing.Protocol):
+class OrderBook:
     def process_limit_order(self, order: models.Order) -> models.MatchResult:
         """
         The core engine entry point.
