@@ -2,6 +2,9 @@ from src import models
 
 
 class OrderBook:
+    def __init__(self, orders: list[models.Order] | None = None) -> None:
+        self._orders = orders
+
     def process_limit_order(self, order: models.Order) -> models.MatchResult:
         """
         The core engine entry point.
