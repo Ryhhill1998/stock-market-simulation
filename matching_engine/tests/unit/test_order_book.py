@@ -17,6 +17,34 @@ def order_book_factory() -> typing.Callable[[list[models.Order]], OrderBook]:
 
 
 # -------------------- PROCESS LIMIT ORDER -------------------- #
+def test_process_limit_order_filled(order_book_factory: typing.Callable[[list[models.Order]], OrderBook]) -> None:
+    # ARRANGE
+    orders = [models.Order(order_id="1", side=constants.Side.SELL, price=100, quantity=1)]
+    order_book: OrderBook = order_book_factory(orders)
+
+    # ACT
+    order = models.Order(order_id="1", side=constants.Side.BUY, price=100, quantity=1)
+    result: models.MatchResult = order_book.process_limit_order(order)
+
+    # ASSERT
+    expected_result = models.MatchResult(order_status=constants.OrderStatus.FILLED, trades=[], remaining_quantity=0)
+    assert result == expected_result
+
+
+def test_process_limit_order_partially_filled(order_book_factory: typing.Callable[[list[models.Order]], OrderBook]) -> None:
+    # ARRANGE
+    orders = [models.Order(order_id="1", side=constants.Side.SELL, price=100, quantity=1)]
+    order_book: OrderBook = order_book_factory(orders)
+
+    # ACT
+    order = models.Order(order_id="1", side=constants.Side.BUY, price=100, quantity=2)
+    result: models.MatchResult = order_book.process_limit_order(order)
+
+    # ASSERT
+    expected_result = models.MatchResult(order_status=constants.OrderStatus.PARTIALLY_FILLED, trades=[], remaining_quantity=1)
+    assert result == expected_result
+
+
 def test_process_limit_order_rested(order_book_factory: typing.Callable[[list[models.Order]], OrderBook]) -> None:
     # ARRANGE
     orders: list[models.Order] = []
@@ -28,20 +56,6 @@ def test_process_limit_order_rested(order_book_factory: typing.Callable[[list[mo
 
     # ASSERT
     expected_result = models.MatchResult(order_status=constants.OrderStatus.RESTED, trades=[], remaining_quantity=1)
-    assert result == expected_result
-
-
-def test_process_limit_order_filled(order_book_factory: typing.Callable[[list[models.Order]], OrderBook]) -> None:
-    # ARRANGE
-    orders: list[models.Order] = [models.Order(order_id="1", side=constants.Side.SELL, price=100, quantity=1)]
-    order_book: OrderBook = order_book_factory(orders)
-
-    # ACT
-    order = models.Order(order_id="1", side=constants.Side.BUY, price=100, quantity=1)
-    result: models.MatchResult = order_book.process_limit_order(order)
-
-    # ASSERT
-    expected_result = models.MatchResult(order_status=constants.OrderStatus.FILLED, trades=[], remaining_quantity=0)
     assert result == expected_result
 
 
