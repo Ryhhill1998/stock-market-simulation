@@ -1,3 +1,4 @@
+import constants
 from src import models
 
 
@@ -13,7 +14,7 @@ class OrderBook:
 
         ...
 
-    def process_market_order(self, side: models.Side, quantity: int) -> models.MatchResult:
+    def process_market_order(self, side: constants.Side, quantity: int) -> models.MatchResult:
         """
         Immediately consumes liquidity at the best available prices.
         Does not enter the book.
@@ -36,7 +37,7 @@ class OrderBook:
 
         ...
 
-    def get_volume_at_price(self, side: models.Side, price: int) -> int:
+    def get_volume_at_price(self, side: constants.Side, price: int) -> int:
         """Returns the total quantity resting at a specific price level."""
 
         ...
